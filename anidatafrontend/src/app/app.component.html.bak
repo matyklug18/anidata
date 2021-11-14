@@ -1,0 +1,11 @@
+<div *ngIf="users.getAuthed()">
+	<div *ngFor="let user of usersList | async">
+		<h4>{{ user.username }}</h4>
+		<h5>{{ user.password }}</h5>
+	</div>
+</div>
+
+<div *ngIf="!users.getAuthed()">
+	<app-login></app-login>
+</div>
+
