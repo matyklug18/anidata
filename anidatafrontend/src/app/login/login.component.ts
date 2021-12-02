@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from "@angular/router";
 
-import { UsersService } from '../users.service';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +11,7 @@ import { UsersService } from '../users.service';
 })
 export class LoginComponent implements OnInit {
 
-	constructor(private users: UsersService) {}
+	constructor(private login: LoginService, private route: Router) {}
 
 
   ngOnInit(): void {
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
 
 	onSubmit(form: NgForm) {
 		var values = form.form.value;
-		this.users.login(values.username, values.password);
+		this.login.login(values.username, values.password);
+		this.route.navigate(["/main"]);
   }
 }
