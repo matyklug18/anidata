@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   }
 
 	onSubmit(form: NgForm) {
-		var values = form.form.value;
+		const values = form.form.value;
 		this.login.login(values.username, values.password);
 		this.route.navigate(["/main"]);
   }

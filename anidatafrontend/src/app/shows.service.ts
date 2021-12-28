@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { User } from './user.type';
+import { Show } from './show.type';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class ShowsService {
 
   constructor(
 		private http: HttpClient
 	) { }
 
-	getUsers(): Observable<User[]> {
-		return this.http.get<User[]>("/api/private/users");
+	getShows(): Observable<Show[]> {
+		return this.http.get<Show[]>("/api/private/shows");
 	}
 }

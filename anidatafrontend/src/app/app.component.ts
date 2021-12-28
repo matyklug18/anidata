@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import { UsersService } from './users.service';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,7 +7,4 @@ import { UsersService } from './users.service';
 })
 export class AppComponent {
   title = 'anidatafrontend';
-	usersList = this.users.getUsers();
-
-	constructor(private users: UsersService) {}
 }

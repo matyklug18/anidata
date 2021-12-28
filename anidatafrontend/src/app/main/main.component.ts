@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { UsersService } from '../users.service';
+import { ShowsService } from '../shows.service';
 
-import { User } from '../user.type';
+import { Show } from '../show.type';
 
 @Component({
   selector: 'app-main',
@@ -13,11 +13,11 @@ import { User } from '../user.type';
 })
 export class MainComponent implements OnInit {
 
-	constructor(private users: UsersService) {}
+	constructor(private shows: ShowsService) {}
 
-	usersList: Observable<User[]> | null = null;
+	showsList: Observable<Show[]> | null = null;
 
   ngOnInit(): void {
-		this.usersList = this.users.getUsers();
+		this.showsList = this.shows.getShows();
   }
 }

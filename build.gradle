@@ -22,7 +22,7 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	implementation "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
 	implementation "org.glassfish.jaxb:jaxb-runtime:2.3.2"
-	implementation "org.flywaydb:flyway-core:8.0.4"
+	//implementation "org.flywaydb:flyway-core:8.0.4" //No. Just no.
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.2'
 	//implementation 'org.springframework.security:spring-security-oauth2-resource-server'
