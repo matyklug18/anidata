@@ -1,19 +1,18 @@
-<div class="d-flex p-2">
-<div class="d-flex justify-content-center">
-    <h2>Login</h2>
-    <form #form = "ngForm" (ngSubmit) = "onSubmit(form)">
-        <div>
-            <label for="username">Username</label>
-            <input type="text" name="username" id="username" ngModel/>
-        </div>
-        <div>
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" ngModel/>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
+<div class="container">
+	<div class="d-flex justify-content-center">
+		<h2>Login</h2>
+		<form #form = "ngForm" (ngSubmit) = "onSubmit(form)">
+			<div>
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username" ngModel/>
+			</div>
+			<div>
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" ngModel/>
+			</div>
+			<div>
+				<button type="submit">Login</button>
+			</div>
+		</form>
+	</div>
 </div>
-</div>
-
