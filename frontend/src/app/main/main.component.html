@@ -1,0 +1,11 @@
+<h1 class="text-center mt-3 mb-4">Shows List</h1>
+<div class="d-flex flex-column ani-list bg-white" *ngFor="let show of showsList | async">
+	<div class="rounded-5 shadow-sm p-3 mb-5 bg-light rounded ani-card">
+		<h4 class="ani-title">{{ show.title }}</h4>
+		<hr/>
+		<div class="d-flex flex-row" >
+			<img class="ani-cover" src="assets/imgs/{{show.title}}.png">
+			<div class="ani-desc ms-4" [innerHTML]="show.info"></div>
+		</div>
+	</div>
+</div>

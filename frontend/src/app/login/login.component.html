@@ -1,0 +1,18 @@
+<section class="vh-100">
+  <div class="container-fluid">
+		<div class="center-block border">
+			<h2>Login</h2>
+			<form #form = "ngForm" (ngSubmit) = "onSubmit(form)">
+				<div>
+					<input type="text" name="username" id="username" placeholder="Username" ngModel/>
+				</div>
+				<div>
+					<input type="password" name="password" id="password" placeholder="Password" ngModel/>
+				</div>
+				<div>
+					<button type="submit">Login</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>

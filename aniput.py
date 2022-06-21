@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+
 import requests as rq
+import os
 
 # Does not protect against sql injection, script tags nor double quotes.
 def make_sql(title, info):
@@ -16,9 +19,10 @@ Neko no Ongaeshi
 
 # Have to get rid of first and last element, due to the above multiline string
 for title in src.split('\n')[1:-1]:
-    print() # Graphical separation
+    print()
     m = do_search(title)
-    try: # In case there was an issue in the search results
+    os.system(f'curl -s {m["coverImage"]["large"]} -o "anidatafrontend/src/assets/imgs/{m["title"]["romaji"]}.png"')
+    try:
         print(make_sql(m["title"]["romaji"], m["description"]))
     except Exception:
-        print(m) # Just print the actual results
+        print(m)

@@ -66,7 +66,15 @@ TODO change VARCHAR(4096) to TEXT in db
 	- Genres
 
 ## LEFT:
--	CSS
+
+#### Push till friday
+-	css
+- [x] move services to their own dirs
+- [x] varchar -> text (seems like a primary key cannot be TEXT)
+- [x] image covers
+
+- new route for per-anime entry
+
 - message upon failed login
-- varchar -> text
-- pull users from DB
+- pull users from DB (work around spring)
+- handling of big amounts of entries
