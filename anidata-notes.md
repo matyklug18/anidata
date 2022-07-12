@@ -68,12 +68,16 @@ TODO change VARCHAR(4096) to TEXT in db
 ## LEFT:
 
 #### Push till friday
--	css
+- [x] css
 - [x] move services to their own dirs
 - [x] varchar -> text (seems like a primary key cannot be TEXT)
 - [x] image covers
 
-- new route for per-anime entry
+
+- [x] new route for per-anime entry
+- [x] addition - tags [[./tags.org]]
+- [x] login change background of placeholder
+
 
 - message upon failed login
 - pull users from DB (work around spring)

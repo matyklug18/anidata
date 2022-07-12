@@ -1,0 +1,19 @@
+#+TITLE: Todo
+* Specific
+** Database
+*** TODO Users
+**** DONE Table
+** Backend
+*** TODO Filter
+**** TODO Authenticate
+** Frontend
+*** TODO Register
+**** TODO Page
+
+* Comments
+** Add comments
+** Edit comments
+** Delete comments
+
+* Users
+** Register

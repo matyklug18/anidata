@@ -9,12 +9,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LongShowComponent } from './long-show/long-show.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    MainComponent
+    MainComponent,
+    LongShowComponent
   ],
   imports: [
     BrowserModule,

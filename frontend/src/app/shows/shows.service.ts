@@ -17,4 +17,9 @@ export class ShowsService {
 	getShows(): Observable<Show[]> {
 		return this.http.get<Show[]>("/api/private/shows");
 	}
+
+
+	getShowById(id: number): Observable<Show> {
+		return this.http.get<Show>("/api/private/shows/"+id);
+	}
 }

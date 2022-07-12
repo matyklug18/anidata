@@ -13,11 +13,12 @@ import { Show } from '../shows/show.type';
 })
 export class MainComponent implements OnInit {
 
-	constructor(private shows: ShowsService) {}
+  constructor(private shows: ShowsService) {}
 
-	showsList: Observable<Show[]> | null = null;
+  showsList: Observable<Show[]> | null = null;
 
   ngOnInit(): void {
-		this.showsList = this.shows.getShows();
+    this.showsList = this.shows.getShows();
+
   }
 }

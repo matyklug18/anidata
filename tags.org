@@ -1,0 +1,12 @@
+#+TITLE: Tags
+
+** Tags
+| Anime ID | Tag      | Amount |
+|----------+----------+--------|
+|        0 | Politics |    93% |
+|        0 | War      |    91% |
+
+** Animes
+| ID | Title            | Description |
+|----+------------------+-------------|
+|  0 | Heike Monogatari | Blah blah   |

@@ -11,15 +11,15 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
 
-	constructor(private login: LoginService, private route: Router) {}
+  constructor(private login: LoginService, private route: Router) {}
 
 
   ngOnInit(): void {
   }
 
-	onSubmit(form: NgForm) {
-		const values = form.form.value;
-		this.login.login(values.username, values.password);
-		this.route.navigate(["/main"]);
+  onSubmit(form: NgForm) {
+    const values = form.form.value;
+    this.login.login(values.username, values.password);
+    this.route.navigate(["/main"]);
   }
 }

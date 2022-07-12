@@ -1,0 +1,182 @@
+#+TITLE: Database
+#+PROPERTY: header-args:sql :cmdline "-h 127.0.0.1 -u root -D main" :engine mysql
+
+* Mapping
+#+NAME: ids
+- 199
+- 523
+- 597
+
+* Delete
+#+begin_src sql :results silent
+DROP TABLE tags;
+DROP TABLE shows;
+#+end_src
+
+* Shows
+** Create
+#+BEGIN_SRC sql :results silent
+CREATE TABLE IF NOT EXISTS shows (
+       id INTEGER PRIMARY KEY AUTO_INCREMENT,
+       title VARCHAR(256) NOT NULL UNIQUE,
+       info TEXT NOT NULL
+);
+#+END_SRC
+** Generate
+#+begin_src python :var ids=ids :results output code :wrap "SRC sql :results silent"
+import os
+import requests as rq
+
+for en in ids:
+    info = rq.post('https://graphql.anilist.co', json = {'variables':{'id':en[0]},'query':'query($id:Int){Media(id:$id,type:ANIME){description(asHtml:true) siteUrl coverImage{large} title{romaji}}}'}).json()["data"]["Media"]
+    os.system(f'curl -s {info["coverImage"]["large"]} -o "frontend/src/assets/imgs/{info["title"]["romaji"]}.png"')
+    print(f'INSERT IGNORE INTO shows(title,info) VALUES ("{info["title"]["romaji"]}","{info["description"]}");'.replace("\n",""))
+#+end_src
+
+#+RESULTS:
+#+begin_SRC sql :results silent
+INSERT IGNORE INTO shows(title,info) VALUES ("Sen to Chihiro no Kamikakushi","<p>On the way to their new home, 10-year-old Chihiro Ogino's family stumbles upon a deserted theme park. Intrigued, the family investigates the park, though unbeknownst to them, it is secretly inhabited by spirits who sleep by day and appear at night. When Chihiro's mother and father eat food from a restaurant in the street, angry spirits turn them into pigs. Furthermore, a wide sea has appeared between the spirit world and the human one, trapping Chihiro, the sole human, in a land of spirits. Luckily for her though, a mysterious boy named Haku appears, claiming to know her from the past. Under his instructions, Chihiro secures a job in the bathhouse where Haku works. With only her courage and some new found friends to aid her, Chihiro embarks on a journey to turn her parents back to their original forms and return home.</p>");
+INSERT IGNORE INTO shows(title,info) VALUES ("Tonari no Totoro","<p>Follow the adventures of Satsuki and her four-year-old sister Mei when they move into a new home in the countryside. To their delight they discover that their new neighbor is a mysterious forest spirit called Totoro who can be seen only through the eyes of a child. Totoro introduces them to extraordinary characters, including a cat that doubles as a bus, takes them on a journey through the wonders of nature. <br><br><br />(Source: Disney) </p>");
+INSERT IGNORE INTO shows(title,info) VALUES ("Neko no Ongaeshi","<p>The Cat Returns is something of a loose spin-off of &quot;Whisper of the Heart&quot; as it features two characters from that film: Muta (the cat from &quot;Whisper&quot;) and the Baron (the cat statue from &quot;Whisper&quot;). There is no other connection between the two movies and this is not a sequel. The story is based on Neko no Danshaku (Baron of Cat) by Hiiragi Aoi. <br><br><br />The main character of the story, Haru, is a clueless, ordinary 17-year-old girl. She has no special abilities and neither is she an extraordinary beauty. When faced with reality, she is unable to make decisions for herself, thus often sways to others' opinions to avoid challenge. One day, Haru saves the life of a cat without considering her own safety. The cat turns out to be the Cat Prince from the Kingdom of Cats, however as a result, Haru is trapped in the world of cats. Can Baron and Muta rescue Haru who has wandered into the world of cats? <br><br><br />(Source: AniDB, edited)</p>");
+#+end_SRC
+
+** View
+#+BEGIN_SRC sql
+SELECT * FROM shows;
+#+END_SRC
+
+#+RESULTS:
+| id | title                         | info                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+|----+-------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|  1 | Sen to Chihiro no Kamikakushi | <p>On the way to their new home, 10-year-old Chihiro Ogino's family stumbles upon a deserted theme park. Intrigued, the family investigates the park, though unbeknownst to them, it is secretly inhabited by spirits who sleep by day and appear at night. When Chihiro's mother and father eat food from a restaurant in the street, angry spirits turn them into pigs. Furthermore, a wide sea has appeared between the spirit world and the human one, trapping Chihiro, the sole human, in a land of spirits. Luckily for her though, a mysterious boy named Haku appears, claiming to know her from the past. Under his instructions, Chihiro secures a job in the bathhouse where Haku works. With only her courage and some new found friends to aid her, Chihiro embarks on a journey to turn her parents back to their original forms and return home.</p>                                                                                                                                                      |
+|  2 | Tonari no Totoro              | <p>Follow the adventures of Satsuki and her four-year-old sister Mei when they move into a new home in the countryside. To their delight they discover that their new neighbor is a mysterious forest spirit called Totoro who can be seen only through the eyes of a child. Totoro introduces them to extraordinary characters, including a cat that doubles as a bus, takes them on a journey through the wonders of nature. <br><br><br />(Source: Disney) </p>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|  3 | Neko no Ongaeshi              | <p>The Cat Returns is something of a loose spin-off of &quot;Whisper of the Heart&quot; as it features two characters from that film: Muta (the cat from &quot;Whisper&quot;) and the Baron (the cat statue from &quot;Whisper&quot;). There is no other connection between the two movies and this is not a sequel. The story is based on Neko no Danshaku (Baron of Cat) by Hiiragi Aoi. <br><br><br />The main character of the story, Haru, is a clueless, ordinary 17-year-old girl. She has no special abilities and neither is she an extraordinary beauty. When faced with reality, she is unable to make decisions for herself, thus often sways to others' opinions to avoid challenge. One day, Haru saves the life of a cat without considering her own safety. The cat turns out to be the Cat Prince from the Kingdom of Cats, however as a result, Haru is trapped in the world of cats. Can Baron and Muta rescue Haru who has wandered into the world of cats? <br><br><br />(Source: AniDB, edited)</p> |
+
+* Tags
+** Create
+#+BEGIN_SRC sql :results silent
+CREATE TABLE IF NOT EXISTS tags (
+       id INT PRIMARY KEY AUTO_INCREMENT,
+       show_id INT NOT NULL,
+       tag VARCHAR(64) NOT NULL,
+       amount FLOAT NOT NULL,
+       FOREIGN KEY (`show_id`) REFERENCES `shows` (`id`),
+       UNIQUE KEY `uniq_id` (`show_id`,`tag`)
+);
+#+END_SRC
+** Generate
+#+begin_src python :var ids=ids :results output code :wrap "SRC sql :results silent"
+import os
+import requests as rq
+
+for i,en in enumerate(ids,start=1):
+    tags = rq.post('https://graphql.anilist.co', json = {'variables':{'id':en[0]},'query':'query($id:Int){Media(id:$id,type:ANIME){tags{name,rank}}}'}).json()["data"]["Media"]["tags"]
+    tags.sort(key=lambda v: v["rank"], reverse=True)
+    for t in tags:
+        print(f'REPLACE INTO tags (show_id, tag, amount) VALUES ({i}, "{t["name"]}", {t["rank"]/100});')
+#+end_src
+
+#+RESULTS:
+#+begin_SRC sql :results silent
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Coming of Age", 0.91);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Youkai", 0.86);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Female Protagonist", 0.86);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Urban Fantasy", 0.82);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Magic", 0.79);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Mythology", 0.73);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Isekai", 0.72);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Philosophy", 0.66);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Gods", 0.64);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Witch", 0.58);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Memory Manipulation", 0.57);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Kids", 0.53);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Dragons", 0.52);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Trains", 0.42);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Work", 0.4);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Primarily Child Cast", 0.4);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Twins", 0.35);
+REPLACE INTO tags (show_id, tag, amount) VALUES (1, "Travel", 0.2);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Primarily Child Cast", 0.9);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Family Life", 0.88);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Rural", 0.84);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Kids", 0.76);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Youkai", 0.76);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Female Protagonist", 0.73);
+REPLACE INTO tags (show_id, tag, amount) VALUES (2, "Gods", 0.56);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Animals", 0.97);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Female Protagonist", 0.9);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Nekomimi", 0.84);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Fairy Tale", 0.79);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Shoujo", 0.76);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Isekai", 0.65);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Kemonomimi", 0.6);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Crossover", 0.4);
+REPLACE INTO tags (show_id, tag, amount) VALUES (3, "Body Horror", 0.4);
+#+end_SRC
+
+** View
+#+BEGIN_SRC sql
+SELECT * FROM tags;
+#+END_SRC
+
+#+RESULTS:
+| id | show_id | tag                  | amount |
+|----+---------+----------------------+--------|
+|  1 |       1 | Coming of Age        |   0.91 |
+|  2 |       1 | Youkai               |   0.86 |
+|  3 |       1 | Female Protagonist   |   0.86 |
+|  4 |       1 | Urban Fantasy        |   0.82 |
+|  5 |       1 | Magic                |   0.79 |
+|  6 |       1 | Mythology            |   0.73 |
+|  7 |       1 | Isekai               |   0.72 |
+|  8 |       1 | Philosophy           |   0.66 |
+|  9 |       1 | Gods                 |   0.64 |
+| 10 |       1 | Witch                |   0.58 |
+| 11 |       1 | Memory Manipulation  |   0.57 |
+| 12 |       1 | Kids                 |   0.53 |
+| 13 |       1 | Dragons              |   0.52 |
+| 14 |       1 | Trains               |   0.42 |
+| 15 |       1 | Work                 |    0.4 |
+| 16 |       1 | Primarily Child Cast |    0.4 |
+| 17 |       1 | Twins                |   0.35 |
+| 18 |       1 | Travel               |    0.2 |
+| 19 |       2 | Primarily Child Cast |    0.9 |
+| 20 |       2 | Family Life          |   0.88 |
+| 21 |       2 | Rural                |   0.84 |
+| 22 |       2 | Kids                 |   0.76 |
+| 23 |       2 | Youkai               |   0.76 |
+| 24 |       2 | Female Protagonist   |   0.73 |
+| 25 |       2 | Gods                 |   0.56 |
+| 26 |       3 | Animals              |   0.97 |
+| 27 |       3 | Female Protagonist   |    0.9 |
+| 28 |       3 | Nekomimi             |   0.84 |
+| 29 |       3 | Fairy Tale           |   0.79 |
+| 30 |       3 | Shoujo               |   0.76 |
+| 31 |       3 | Isekai               |   0.65 |
+| 32 |       3 | Kemonomimi           |    0.6 |
+| 33 |       3 | Crossover            |    0.4 |
+| 34 |       3 | Body Horror          |    0.4 |
+
+* Users
+** Create
+#+BEGIN_SRC sql :results silent
+CREATE TABLE IF NOT EXISTS users (
+       id INTEGER PRIMARY KEY AUTO_INCREMENT,
+       username VARCHAR(256) NOT NULL UNIQUE,
+       password VARCHAR(256) NOT NULL
+);
+#+END_SRC
+** Fill
+#+begin_src sql :results silent
+INSERT INTO users(username,password) VALUES ("user", "user")
+#+end_src
+*** TODO should be hashed
+** View
+#+BEGIN_SRC sql
+SELECT * FROM users;
+#+END_SRC
+
+#+RESULTS:
+| id | username | password |
+|----+----------+----------|
+|  1 | user     | user     |
